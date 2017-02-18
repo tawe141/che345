@@ -1,10 +1,8 @@
 from googlemaps import Client
 from googlemaps.distance_matrix import distance_matrix
-import dotenv, pprint
+import dotenv, csv
 
 dotenv.load()
-
-pp = pprint.PrettyPrinter(indent=4)
 
 cities = [
     "Chicago, IL",
@@ -51,6 +49,8 @@ def iter_gather(client: Client, cities: list) -> list:
     Iteratively gathers distance data and
     formulates an upper triangular matrix of distances between cities
 
+    Add list of blanks at the end to accommodate for missing city distance for last city in list
+
     :param client: Client object provided by googlemaps package; to be passed to gather()
     :param cities: list of city names
     :return: returns 2D upper triangular matrix of distances
@@ -60,9 +60,16 @@ def iter_gather(client: Client, cities: list) -> list:
             gather(client, cities[i], cities[(i+1):]),
             len(cities)
         ) for i in range(len(cities) - 1)
-    ]
+    ] + [left_pad([], len(cities))]  # last empty list accommodates for cities(-1)
 
 
 if __name__ == '__main__':
     client = Client(key=dotenv.get('API_KEY'))
     matrix = iter_gather(client, cities)
+    with open('distances.csv', 'w', newline='') as csvfile:
+        # add space in first row to offset labelling
+        labels = [''] + ['i'+str(n) for n in range(1, len(cities)+1)]
+        writer = csv.writer(csvfile)
+        writer.writerow(labels)
+        for i in range(len(cities)):
+            writer.writerow([labels[i+1]] + matrix[i])
