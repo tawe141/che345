@@ -6,11 +6,12 @@ dotenv.load()
 
 cities = [
     "Chicago, IL",
-    "Denver, CO",
     "Milwaukee, WI",
     "Indianapolis, ID",
     "Kansas City, MO",
-    "St. Louis, MO"
+    "St. Louis, MO",
+    "Cincinnati, OH",
+    "Minneapolis, MN"
     ]
 
 
@@ -31,14 +32,14 @@ def gather(client: Client, origin: str, destinations: list) -> list:
     ]
 
 
-def left_pad(iterable: list, length: int, fill='') -> list:
+def left_pad(iterable: list, length: int, fill=0) -> list:
     """
     Pads with some string or float on the left of an array
     Helps generate upper-right triangular matrix
 
     :param iterable: iterable object (in this usage, a list)
     :param length: total length of resulting List
-    :param fill: fill string for padding; defaults to ''
+    :param fill: fill string for padding; defaults to 0
     :return: list padded on left with fill
     """
     return [fill] * (length - len(iterable)) + iterable if length >= len(iterable) else 0
@@ -64,12 +65,20 @@ def iter_gather(client: Client, cities: list) -> list:
 
 
 if __name__ == '__main__':
+    print('Loading Google Maps API Client...')
     client = Client(key=dotenv.get('API_KEY'))
+
+    print('Gathering distance data...')
     matrix = iter_gather(client, cities)
+
+    print('Writing to CSV table...')
     with open('distances.csv', 'w', newline='') as csvfile:
-        # add space in first row to offset labelling
-        labels = [''] + ['i'+str(n) for n in range(1, len(cities)+1)]
+        # add dummy space in first row to offset labelling
+        # avoids a bug with importing tables into GAMS
+        labels = ['dummy'] + ['i'+str(n) for n in range(1, len(cities)+1)]
         writer = csv.writer(csvfile)
         writer.writerow(labels)
         for i in range(len(cities)):
             writer.writerow([labels[i+1]] + matrix[i])
+
+    print('Distance table completed.')

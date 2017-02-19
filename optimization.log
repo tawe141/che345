@@ -1,0 +1,18 @@
+
+--- Job optimization.gms Start 02/19/17 13:51:29 24.8.2 r59988 WEX-WEI x86 64bit/MS Windows
+GAMS 24.8.2   Copyright (C) 1987-2017 GAMS Development. All rights reserved
+Licensee: GAMS Development Corporation, Washington, DC   G871201/0000CA-ANY
+          Free Demo,  202-342-0180,  sales@gams.com,  www.gams.com   DC0000
+--- Starting compilation
+--- optimization.gms(8) 3 Mb
+--- .distances.csv(8) 3 Mb
+--- optimization.gms(17) 3 Mb 1 Error
+*** Error 143 in C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
+    A suffix is missing
+--- optimization.gms(28) 3 Mb 2 Errors
+*** Error 257 in C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
+    Solve statement not checked because of previous errors
+--- optimization.gms(29) 3 Mb 2 Errors
+*** Status: Compilation error(s)
+--- Job optimization.gms Stop 02/19/17 13:51:29 elapsed 0:00:00.005
+Exit code = 2

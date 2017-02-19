@@ -1,0 +1,82 @@
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/19/17 13:51:29 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Sets
+   2          i /i1*i7/;
+   3   
+   4  Alias (i,j);
+   5   
+   6  Table d(i,j) distance matrix
+INCLUDE    C:\Users\Eric Taw\PycharmProjects\che345\distances.csv
+   9  dummy,i1,i2,i3,i4,i5,i6,i7
+  10  i1,0,148247,298299,820916,477530,480407,658157
+  11  i2,0,0,449545,911929,599757,631653,542538
+  12  i3,0,0,0,775233,390063,180745,953907
+  13  i4,0,0,0,0,398472,947532,702460
+  14  i5,0,0,0,0,0,562748,898675
+  15  i6,0,0,0,0,0,0,1135024
+  16  i7,0,0,0,0,0,0,0
+  18  ;
+  19   
+  20  d(i,j) = max(d(i,j), d(j,i));
+  21   
+  22  Binary Variable x(i,j)  decision variable: whether edge is taken;
+  23  Variable z              objective: minimize distance;
+  24   
+  25  x(i,i) = 0;
+****  $143
+**** LINE     17 INPUT       C:\Users\Eric Taw\PycharmProjects\che345\optimizati
+                             on.gms
+  26   
+  27  Equations
+  28          obj             minimize distance
+  29          rowsum(i)       each city can only be visited once -- only two edg
+      es per city;
+  30   
+  31          obj .. z =e= sum((i,j), d(i,j)*x(i,j));
+  32          rowsum(i) .. sum(j, x(i,j)) =e= 2;
+  33   
+  34  Model tsp /all/;
+  35   
+  36  Solve tsp using mip minimizing z;
+****                                  $257
+**** LINE     28 INPUT       C:\Users\Eric Taw\PycharmProjects\che345\optimizati
+                             on.gms
+  37   
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/19/17 13:51:29 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Error Messages
+
+
+143  A suffix is missing
+257  Solve statement not checked because of previous errors
+
+**** 2 ERROR(S)   0 WARNING(S)
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/19/17 13:51:29 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\Eric Taw\PycharmProjects\che3
+                                          45\optimization.gms
+     2        8 INCLUDE        1       8  .C:\Users\Eric Taw\PycharmProjects\che
+                                           345\distances.csv
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  24.8.2 r59988 WEX-WEI
+
+
+USER: GAMS Development Corporation, Washington, DC   G871201/0000CA-ANY
+      Free Demo,  202-342-0180,  sales@gams.com,  www.gams.com   DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
+Output     C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
+
+**** USER ERROR(S) ENCOUNTERED
