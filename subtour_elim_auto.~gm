@@ -1,0 +1,46 @@
+$include tsp_model
+
+$ontext
+
+Automatically detect subtours and generate cuts on the fly
+
+$offtext
+
+Model tsp /obj, rowsum, colsum, zero_diag/;
+
+Solve tsp using mip minimizing z;
+
+$ontext
+
+Find subtours
+
+$offtext
+
+Set t tours /t1*t20/;
+
+Parameter tour(i,j,t) subtours;
+
+Singleton Sets
+	from(i)		the from city
+        next(j)		the next city
+        tt(t)		the current subtour;
+
+Sets visited(i)		indicates whether a city has been visited;
+
+from(i)$(ord(i)=1) = yes;
+tt(t)$(ord(t)=1) = yes;
+
+loop(i,
+	next(j)$(x.l(from,j)>0.5) = yes;
+        tour(from,next,tt) = yes;
+        visited(from) = yes;
+        from(j) = next(j);
+        if(sum(visited(next),1)>0,
+        	tt(t) = tt(t+1);
+                loop(k$(not visited(k)),
+                	from(k) = yes;
+                )
+        )
+)
+
+display tour;
