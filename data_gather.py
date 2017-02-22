@@ -1,18 +1,11 @@
+import os
+import pickle
+
 from googlemaps import Client
 from googlemaps.distance_matrix import distance_matrix
-import dotenv, csv
+import dotenv
 
 dotenv.load()
-
-cities = [
-    "Chicago, IL",
-    "Milwaukee, WI",
-    "Indianapolis, ID",
-    "Kansas City, MO",
-    "St. Louis, MO",
-    # "Cincinnati, OH",
-    # "Minneapolis, MN"
-    ]
 
 
 def gather(client: Client, origin: str, destinations: list) -> list:
@@ -32,7 +25,7 @@ def gather(client: Client, origin: str, destinations: list) -> list:
     ]
 
 
-def left_pad(iterable: list, length: int, fill='') -> list:
+def left_pad(iterable: list, length: int, fill=0) -> list:
     """
     Pads with some string or float on the left of an array
     Helps generate upper-right triangular matrix
@@ -64,21 +57,26 @@ def iter_gather(client: Client, cities: list) -> list:
     ] + [left_pad([], len(cities))]  # last empty list accommodates for cities(-1)
 
 
-if __name__ == '__main__':
-    print('Loading Google Maps API Client...')
+def run(cities: list, force=False) -> list:
     client = Client(key=dotenv.get('API_KEY'))
-
-    print('Gathering distance data...')
-    matrix = iter_gather(client, cities)
-
-    print('Writing to CSV table...')
-    with open('distances.csv', 'w', newline='') as csvfile:
-        # add dummy space in first row to offset labelling
-        # avoids a bug with importing tables into GAMS
-        labels = ['dummy'] + ['i'+str(n) for n in range(1, len(cities)+1)]
-        writer = csv.writer(csvfile)
-        writer.writerow(labels)
-        for i in range(len(cities)):
-            writer.writerow([labels[i+1]] + matrix[i])
-
-    print('Distance table completed.')
+    if force:
+        os.remove('distance_data')
+        with open('distance_data', mode='ab') as data_file:
+            matrix = iter_gather(client, cities)
+            pickle.dump(matrix, data_file)
+            return matrix
+    try:
+        is_empty = os.stat('distance_data').st_size == 0
+        if is_empty:
+            with open('distance_data', mode='wb') as data_file:
+                matrix = iter_gather(client, cities)
+                pickle.dump(matrix, data_file)
+                return matrix
+        else:
+            with open('distance_data', mode='rb') as data_file:
+                return pickle.load(data_file)
+    except FileNotFoundError:
+        with open('distance_data', mode='ab') as data_file:
+            matrix = iter_gather(client, cities)
+            pickle.dump(matrix, data_file)
+            return matrix

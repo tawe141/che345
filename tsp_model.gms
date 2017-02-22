@@ -1,5 +1,5 @@
 Sets
-	i /i1*i5/;
+        i /i1*i5/;
 
 Alias (i,j);
 
@@ -11,15 +11,15 @@ $offdelim
 
 d(i,j) = max(d(i,j), d(j,i));
 
-Binary Variable x(i,j)	decision variable: whether edge is taken;
+Binary Variable x(i,j)  decision variable: whether edge is taken;
 Variables
-	z		objective: minimize distance;
+        z               objective: minimize distance;
 
 Equations
-	obj 		minimize distance
+        obj             minimize distance
         rowsum(i)
         colsum(j)
-        zero_diag	zero diagonal;
+        zero_diag       zero diagonal;
 
         obj .. z =e= sum((i,j), d(i,j)*x(i,j));
         rowsum(i) .. sum(j, x(i,j)) =e= 1;

@@ -1,3 +1,18 @@
 B 2 C o m p i l a t i o n
-B 53 Error Messages
-B 62 Include File Summary
+B 45 Include File Summary
+B 59 Equation Listing    SOLVE tsp Using MIP From line 39
+D 60 obj
+D 76 rowsum
+D 93 colsum
+D 110 zero_diag
+B 119 Column Listing      SOLVE tsp Using MIP From line 39
+E 120 x
+E 143 z
+B 152 Model Statistics    SOLVE tsp Using MIP From line 39
+B 168 Solution Report     SOLVE tsp Using MIP From line 39
+F 201 obj
+F 209 rowsum
+F 219 colsum
+F 227 zero_diag
+G 230 x
+G 260 z

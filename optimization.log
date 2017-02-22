@@ -1,20 +1,41 @@
 
---- Job optimization.gms Start 02/21/17 18:06:54 24.8.2 r59988 WEX-WEI x86 64bit/MS Windows
+--- Job optimization.gms Start 02/22/17 02:19:09 24.8.2 r59988 WEX-WEI x86 64bit/MS Windows
 GAMS 24.8.2   Copyright (C) 1987-2017 GAMS Development. All rights reserved
 Licensee: GAMS Development Corporation, Washington, DC   G871201/0000CA-ANY
           Free Demo,  202-342-0180,  sales@gams.com,  www.gams.com   DC0000
 --- Starting compilation
---- optimization.gms(10) 3 Mb
+--- optimization.gms(8) 3 Mb
 --- .distances.csv(6) 3 Mb
---- optimization.gms(31) 3 Mb 2 Errors
-*** Error 149 in C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
-    Uncontrolled set entered as constant
-*** Error 149 in C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
-    Uncontrolled set entered as constant
---- optimization.gms(35) 3 Mb 3 Errors
-*** Error 257 in C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
-    Solve statement not checked because of previous errors
---- optimization.gms(36) 3 Mb 3 Errors
-*** Status: Compilation error(s)
---- Job optimization.gms Stop 02/21/17 18:06:54 elapsed 0:00:00.032
-Exit code = 2
+--- optimization.gms(34) 3 Mb
+--- Starting execution: elapsed 0:00:00.004
+--- optimization.gms(37) 4 Mb
+--- Generating MIP model tsp
+--- optimization.gms(39) 4 Mb
+---   12 rows  26 columns  76 non-zeroes
+---   25 discrete-columns
+--- Executing CBC: elapsed 0:00:00.019
+
+COIN-OR CBC      24.8.2 r59988 Released Jan  3, 2017 WEI x86 64bit/MS Windows 
+
+COIN-OR Branch and Cut (CBC Library 2.9)
+written by J. Forrest
+
+Calling CBC main solution routine...
+Integer solution of 1693035 found by feasibility pump after 0 iterations and 0 nodes (0.00 seconds)
+Search completed - best objective 1693035, took 0 iterations and 0 nodes (0.00 seconds)
+Maximum depth 0, 0 variables fixed on reduced cost
+
+Solved to optimality (within gap tolerances optca and optcr).
+MIP solution:   1.693035e+006   (0 nodes, 0.005 seconds)
+
+Best possible:  1.693035e+006
+Absolute gap:   0.000000e+000   (absolute tolerance optca: 0)
+Relative gap:   0.000000e+000   (relative tolerance optcr: 0.1)
+
+Resolve with fixed discrete variables.
+Optimal - objective value 1693035
+--- Restarting execution
+--- optimization.gms(39) 2 Mb
+--- Reading solution for model tsp
+*** Status: Normal completion
+--- Job optimization.gms Stop 02/22/17 02:19:09 elapsed 0:00:00.128
