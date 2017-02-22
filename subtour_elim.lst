@@ -1,0 +1,323 @@
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+INCLUDE    C:\Users\Eric Taw\PycharmProjects\che345\tsp_model.gms
+   2  Sets
+   3          i /i1*i5/;
+   4   
+   5  Alias (i,j);
+   6   
+   7  Table d(i,j) distance matrix
+INCLUDE    C:\Users\Eric Taw\PycharmProjects\che345\distances.csv
+  10  dummy,i1,i2,i3,i4,i5
+  11  i1,,148247,298299,820916,477530
+  12  i2,,,449545,911929,599757
+  13  i3,,,,775233,390063
+  14  i4,,,,,398472
+  15  i5,,,,,
+  17  ;
+  18   
+  19  d(i,j) = max(d(i,j), d(j,i));
+  20   
+  21  Binary Variable x(i,j)  decision variable: whether edge is taken;
+  22  Variables
+  23          z               objective: minimize distance;
+  24   
+  25  Equations
+  26          obj             minimize distance
+  27          rowsum(i)
+  28          colsum(j)
+  29          zero_diag       zero diagonal;
+  30   
+  31          obj .. z =e= sum((i,j), d(i,j)*x(i,j));
+  32          rowsum(i) .. sum(j, x(i,j)) =e= 1;
+  33          colsum(j) .. sum(i, x(i,j)) =e= 1;
+  34          zero_diag .. sum(i, x(i,i)) =e= 0;
+  35   
+  36   
+  37   
+  38   
+  39  Sets
+  40          n subtour id /n1*n1000/
+  41          S1(i) /i4*i5/
+  42          S2(i) /i1*i2/;
+  43   
+  44  Alias (S1, S1comp);
+  45  Alias (S2, S2comp);
+  46   
+  47  Equations
+  48          subtour1 eliminate subtour around i4 and i5
+  49          subtour2 eliminate subtour around i1 and i2;
+  50   
+  51  subtour1 .. sum((S1,S1comp), x(S1,S1comp)) =l= 1;
+  52  subtour2 .. sum((S2,S2comp), x(S2,S2comp)) =l= 1;
+  53   
+  54  Model tsp /all/;
+  55   
+  56  Solve tsp using mip minimizing z;
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\Eric Taw\PycharmProjects\che3
+                                          45\subtour_elim.gms
+     2        1 INCLUDE        1       1  .C:\Users\Eric Taw\PycharmProjects\che
+                                           345\tsp_model.gms
+     3        9 INCLUDE        2       8  ..C:\Users\Eric Taw\PycharmProjects\ch
+                                            e345\distances.csv
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  24.8.2 r59988 WEX-WEI
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE tsp Using MIP From line 56
+
+
+---- obj  =E=  minimize distance
+
+obj..  - 148247*x(i1,i2) - 298299*x(i1,i3) - 820916*x(i1,i4) - 477530*x(i1,i5)
+     
+      - 148247*x(i2,i1) - 449545*x(i2,i3) - 911929*x(i2,i4) - 599757*x(i2,i5)
+     
+      - 298299*x(i3,i1) - 449545*x(i3,i2) - 775233*x(i3,i4) - 390063*x(i3,i5)
+     
+      - 820916*x(i4,i1) - 911929*x(i4,i2) - 775233*x(i4,i3) - 398472*x(i4,i5)
+     
+      - 477530*x(i5,i1) - 599757*x(i5,i2) - 390063*x(i5,i3) - 398472*x(i5,i4)
+     
+      + z =E= 0 ; (LHS = 0)
+     
+
+---- rowsum  =E=  
+
+rowsum(i1)..  x(i1,i1) + x(i1,i2) + x(i1,i3) + x(i1,i4) + x(i1,i5) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+rowsum(i2)..  x(i2,i1) + x(i2,i2) + x(i2,i3) + x(i2,i4) + x(i2,i5) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+rowsum(i3)..  x(i3,i1) + x(i3,i2) + x(i3,i3) + x(i3,i4) + x(i3,i5) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- colsum  =E=  
+
+colsum(i1)..  x(i1,i1) + x(i2,i1) + x(i3,i1) + x(i4,i1) + x(i5,i1) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+colsum(i2)..  x(i1,i2) + x(i2,i2) + x(i3,i2) + x(i4,i2) + x(i5,i2) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+colsum(i3)..  x(i1,i3) + x(i2,i3) + x(i3,i3) + x(i4,i3) + x(i5,i3) =E= 1 ;
+     
+      (LHS = 0, INFES = 1 ****)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- zero_diag  =E=  zero diagonal
+
+zero_diag..  x(i1,i1) + x(i2,i2) + x(i3,i3) + x(i4,i4) + x(i5,i5) =E= 0 ;
+     
+      (LHS = 0)
+     
+
+---- subtour1  =L=  eliminate subtour around i4 and i5
+
+subtour1..  x(i4,i4) + x(i4,i5) + x(i5,i4) + x(i5,i5) =L= 1 ; (LHS = 0)
+     
+
+---- subtour2  =L=  eliminate subtour around i1 and i2
+
+subtour2..  x(i1,i1) + x(i1,i2) + x(i2,i1) + x(i2,i2) =L= 1 ; (LHS = 0)
+     
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE tsp Using MIP From line 56
+
+
+---- x  decision variable: whether edge is taken
+
+x(i1,i1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       rowsum(i1)
+        1       colsum(i1)
+        1       zero_diag
+        1       subtour2
+
+x(i1,i2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -148247       obj
+        1       rowsum(i1)
+        1       colsum(i2)
+        1       subtour2
+
+x(i1,i3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -298299       obj
+        1       rowsum(i1)
+        1       colsum(i3)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- z  objective: minimize distance
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       obj
+
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE tsp Using MIP From line 56
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           6     SINGLE EQUATIONS           14
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           26
+NON ZERO ELEMENTS            84     DISCRETE VARIABLES         25
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  24.8.2 r59988 WEX-WEI
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 MB  24.8.2 r59988 WEX-WEI
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE tsp Using MIP From line 56
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   tsp                 OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  56
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE          2147010.0000
+
+ RESOURCE USAGE, LIMIT          0.125      1000.000
+ ITERATION COUNT, LIMIT        11    2000000000
+
+IBM ILOG CPLEX   24.8.2 r59988 Released Jan  3, 2017 WEI x86 64bit/MS Windows 
+Cplex 12.7.0.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+MIP status(101): integer optimal solution
+Cplex Time: 0.11sec (det. 0.18 ticks)
+Fixing integer variables, and solving final LP...
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 0.01 ticks)
+Proven optimal solution.
+
+MIP Solution:      2147010.000000    (11 iterations, 0 nodes)
+Final Solve:       2147010.000000    (0 iterations)
+
+Best possible:     2147010.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU obj             .         .         .        1.000      
+
+  obj  minimize distance
+
+---- EQU rowsum  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+i1     1.000     1.000     1.000      .         
+i2     1.000     1.000     1.000      .         
+i3     1.000     1.000     1.000      .         
+i4     1.000     1.000     1.000      .         
+i5     1.000     1.000     1.000      .         
+
+---- EQU colsum  
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+i1     1.000     1.000     1.000      .         
+i2     1.000     1.000     1.000      .         
+i3     1.000     1.000     1.000      .         
+i4     1.000     1.000     1.000      .         
+i5     1.000     1.000     1.000      .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU zero_diag       .         .         .         .         
+---- EQU subtour1       -INF      1.000     1.000      .         
+---- EQU subtour2       -INF      1.000     1.000      .         
+
+  zero_diag  zero diagonal
+  subtour1  eliminate subtour around i4 and i5
+  subtour2  eliminate subtour around i1 and i2
+
+---- VAR x  decision variable: whether edge is taken
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+i1.i1      .         .        1.000      EPS       
+i1.i2      .        1.000     1.000 1.4825E+5      
+i1.i3      .         .        1.000 2.9830E+5      
+i1.i4      .         .        1.000 8.2092E+5      
+i1.i5      .         .        1.000 4.7753E+5      
+i2.i1      .         .        1.000 1.4825E+5      
+i2.i2      .         .        1.000      EPS       
+i2.i3      .         .        1.000 4.4954E+5      
+i2.i4      .        1.000     1.000 9.1193E+5      
+i2.i5      .         .        1.000 5.9976E+5      
+i3.i1      .        1.000     1.000 2.9830E+5      
+i3.i2      .         .        1.000 4.4954E+5      
+i3.i3      .         .        1.000      EPS       
+i3.i4      .         .        1.000 7.7523E+5      
+i3.i5      .         .        1.000 3.9006E+5      
+i4.i1      .         .        1.000 8.2092E+5      
+i4.i2      .         .        1.000 9.1193E+5      
+i4.i3      .         .        1.000 7.7523E+5      
+i4.i4      .         .        1.000      EPS       
+i4.i5      .        1.000     1.000 3.9847E+5      
+i5.i1      .         .        1.000 4.7753E+5      
+i5.i2      .         .        1.000 5.9976E+5      
+i5.i3      .        1.000     1.000 3.9006E+5      
+i5.i4      .         .        1.000 3.9847E+5      
+i5.i5      .         .        1.000      EPS       
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR z              -INF  2.1470E+6     +INF       .         
+
+  z  objective: minimize distance
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.000 SECONDS      2 MB  24.8.2 r59988 WEX-WEI
+
+
+USER: GAMS Development Corporation, Washington, DC   G871201/0000CA-ANY
+      Free Demo,  202-342-0180,  sales@gams.com,  www.gams.com   DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.gms
+Output     C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.lst

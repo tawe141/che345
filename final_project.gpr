@@ -1,1 +1,14 @@
 [PROJECT]
+
+[RP:OPTIMIZATION]
+1=
+
+[OPENWINDOW_1]
+FILE0=C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
+FILE1=C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
+FILE2=C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
+MAXIM=0
+TOP=3
+LEFT=19
+HEIGHT=638
+WIDTH=970

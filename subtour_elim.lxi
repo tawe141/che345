@@ -1,0 +1,22 @@
+B 2 C o m p i l a t i o n
+B 61 Include File Summary
+B 77 Equation Listing    SOLVE tsp Using MIP From line 56
+D 78 obj
+D 94 rowsum
+D 111 colsum
+D 128 zero_diag
+D 135 subtour1
+D 140 subtour2
+B 147 Column Listing      SOLVE tsp Using MIP From line 56
+E 148 x
+E 173 z
+B 182 Model Statistics    SOLVE tsp Using MIP From line 56
+B 198 Solution Report     SOLVE tsp Using MIP From line 56
+F 236 obj
+F 244 rowsum
+F 254 colsum
+F 262 zero_diag
+F 263 subtour1
+F 264 subtour2
+G 269 x
+G 299 z

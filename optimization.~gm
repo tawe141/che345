@@ -1,5 +1,7 @@
 Sets
-	i /i1*i7/;
+	i /i1*i5/
+        S /i1*i3/;
+
 
 Alias (i,j);
 
@@ -12,16 +14,21 @@ $offdelim
 d(i,j) = max(d(i,j), d(j,i));
 
 Binary Variable x(i,j)	decision variable: whether edge is taken;
-Variable z		objective: minimize distance;
-
-x(i,j) = 0;
+Variables
+	z		objective: minimize distance;
 
 Equations
 	obj 		minimize distance
-        rowsum(i)	each city can only be visited once -- only two edges per city;
+        rowsum(i)
+        colsum(j)
+        zero_diag	zero diagonal
+        subtour(S)	subtour elimination;
 
         obj .. z =e= sum((i,j), d(i,j)*x(i,j));
-        rowsum(i) .. sum(j, x(i,j)) =e= 2;
+        rowsum(i) .. sum(j, x(i,j)) =e= 1;
+        colsum(j) .. sum(i, x(i,j)) =e= 1;
+        zero_diag .. sum(i, x(i,i)) =e= 0;
+        subtour(S) .. sum(i, x(i,j)) =l= 2;
 
 Model tsp /all/;
 

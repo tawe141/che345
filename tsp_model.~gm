@@ -1,7 +1,5 @@
 Sets
-	i /i1*i5/
-        S /i1*i3/;
-
+	i /i1*i5/;
 
 Alias (i,j);
 
@@ -21,16 +19,12 @@ Equations
 	obj 		minimize distance
         rowsum(i)
         colsum(j)
-        zero_diag	zero diagonal
-        subtour		subtour elimination;
+        zero_diag	zero diagonal;
 
         obj .. z =e= sum((i,j), d(i,j)*x(i,j));
         rowsum(i) .. sum(j, x(i,j)) =e= 1;
         colsum(j) .. sum(i, x(i,j)) =e= 1;
         zero_diag .. sum(i, x(i,i)) =e= 0;
-        subtour .. sum(S, x(i,j)) =l= 2;
 
 Model tsp /all/;
-
-Solve tsp using mip minimizing z;
 
