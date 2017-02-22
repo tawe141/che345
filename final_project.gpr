@@ -3,10 +3,26 @@
 [RP:OPTIMIZATION]
 1=
 
+[RP:UNTITLED_1]
+1=
+
+[RP:TSP_MODEL]
+1=
+
+[RP:SUBTOUR_ELIM]
+1=
+
+[MRUFILES]
+1=C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.gms
+2=C:\Users\Eric Taw\PycharmProjects\che345\Untitled_1.gms
+3=C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
+
 [OPENWINDOW_1]
-FILE0=C:\Users\Eric Taw\PycharmProjects\che345\optimization.gms
-FILE1=C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
-FILE2=C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
+FILE0=C:\Users\Eric Taw\PycharmProjects\che345\optimization.lst
+FILE1=C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.lst
+FILE2=C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim_manual.gms
+FILE3=C:\Users\Eric Taw\PycharmProjects\che345\tsp_model.gms
+FILE4=C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim_manual.gms
 MAXIM=0
 TOP=3
 LEFT=19

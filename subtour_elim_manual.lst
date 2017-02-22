@@ -1,4 +1,4 @@
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 1
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -57,7 +57,7 @@ INCLUDE    C:\Users\Eric Taw\PycharmProjects\che345\distances.csv
   54  Model tsp /all/;
   55   
   56  Solve tsp using mip minimizing z;
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 2
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
@@ -65,7 +65,7 @@ Include File Summary
    SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
 
      1        1 INPUT          0       0  C:\Users\Eric Taw\PycharmProjects\che3
-                                          45\subtour_elim.gms
+                                          45\subtour_elim_manual.gms
      2        1 INCLUDE        1       1  .C:\Users\Eric Taw\PycharmProjects\che
                                            345\tsp_model.gms
      3        9 INCLUDE        2       8  ..C:\Users\Eric Taw\PycharmProjects\ch
@@ -73,7 +73,7 @@ Include File Summary
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  24.8.2 r59988 WEX-WEI
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 3
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Equation Listing    SOLVE tsp Using MIP From line 56
 
@@ -143,7 +143,7 @@ subtour1..  x(i4,i4) + x(i4,i5) + x(i5,i4) + x(i5,i5) =L= 1 ; (LHS = 0)
 
 subtour2..  x(i1,i1) + x(i1,i2) + x(i2,i1) + x(i2,i2) =L= 1 ; (LHS = 0)
      
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 4
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Column Listing      SOLVE tsp Using MIP From line 56
 
@@ -178,7 +178,7 @@ z
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       obj
 
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 5
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Model Statistics    SOLVE tsp Using MIP From line 56
 
@@ -194,7 +194,7 @@ GENERATION TIME      =        0.000 SECONDS      4 MB  24.8.2 r59988 WEX-WEI
 
 
 EXECUTION TIME       =        0.000 SECONDS      4 MB  24.8.2 r59988 WEX-WEI
-GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:20:59 Page 6
+GAMS 24.8.2  r59988 Released Jan  3, 2017 WEX-WEI x86 64bit/MS Windows 02/21/17 20:28:58 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Solution Report     SOLVE tsp Using MIP From line 56
 
@@ -209,7 +209,7 @@ Solution Report     SOLVE tsp Using MIP From line 56
 **** MODEL STATUS      1 Optimal                   
 **** OBJECTIVE VALUE          2147010.0000
 
- RESOURCE USAGE, LIMIT          0.125      1000.000
+ RESOURCE USAGE, LIMIT          0.110      1000.000
  ITERATION COUNT, LIMIT        11    2000000000
 
 IBM ILOG CPLEX   24.8.2 r59988 Released Jan  3, 2017 WEI x86 64bit/MS Windows 
@@ -218,7 +218,7 @@ Cplex 12.7.0.0
 Space for names approximately 0.00 Mb
 Use option 'names no' to turn use of names off
 MIP status(101): integer optimal solution
-Cplex Time: 0.11sec (det. 0.18 ticks)
+Cplex Time: 0.09sec (det. 0.18 ticks)
 Fixing integer variables, and solving final LP...
 Fixed MIP status(1): optimal
 Cplex Time: 0.00sec (det. 0.01 ticks)
@@ -319,5 +319,5 @@ USER: GAMS Development Corporation, Washington, DC   G871201/0000CA-ANY
 
 **** FILE SUMMARY
 
-Input      C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.gms
-Output     C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim.lst
+Input      C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim_manual.gms
+Output     C:\Users\Eric Taw\PycharmProjects\che345\subtour_elim_manual.lst
