@@ -57,14 +57,16 @@ def iter_gather(client: Client, cities: list) -> list:
     ] + [left_pad([], len(cities))]  # last empty list accommodates for cities(-1)
 
 
-def run(cities: list, force=False) -> list:
+def run(cities: list) -> list:
+    """
+    Main run function. Obtains client with API key and creates/returns
+    distance_data file depending on whether the file exists
+
+    :rtype: list
+    :param cities: list
+    :return: upper triangular matrix of distances
+    """
     client = Client(key=dotenv.get('API_KEY'))
-    if force:
-        os.remove('distance_data')
-        with open('distance_data', mode='ab') as data_file:
-            matrix = iter_gather(client, cities)
-            pickle.dump(matrix, data_file)
-            return matrix
     try:
         is_empty = os.stat('distance_data').st_size == 0
         if is_empty:
