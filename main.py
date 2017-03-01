@@ -9,7 +9,19 @@ cities = [
     "St. Louis, MO",
     "Cincinnati, OH",
     "Minneapolis, MN",
-    "Detroit, MI"
+    "Detroit, MI",
+    "New York, NY",
+    "Los Angeles, CA",
+    "San Francisco, CA",
+    "Houston, TX",
+    "Phoenix, AZ",
+    "Charlotte, NC",
+    "Seattle, WA",
+    "Boston, MA",
+    "Memphis, TN",
+    "Washington, DC",
+    "Atlanta, GA",
+    "New Orleans, LA"
 ]
 
 
@@ -66,14 +78,17 @@ def find_subtours(trip_list: list, visited=None, partial=[]) -> list:
         visited = []
         subtour = find_one_subtour(origin, trip_list)
         for edge in subtour:
-            visited.append(edge[0])
+            if edge[0] not in visited:
+                visited.append(edge[0])
         return find_subtours(trip_list, visited, [subtour])
     else:
-        not_visited = [i for i in range(n) if i not in visited]
-        new_origin = not_visited[0]
+        # not_visited = [i for i in range(n) if i not in visited]
+        # new_origin = not_visited[0]
+        new_origin = trip_list[0][0]
         subtour = find_one_subtour(new_origin, trip_list, partial=set())
         for edge in subtour:
-            visited.append(edge[0])
+            if edge[0] not in visited:
+                visited.append(edge[0])
         return find_subtours(trip_list, visited, partial + [subtour])
 
 

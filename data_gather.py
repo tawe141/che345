@@ -49,6 +49,9 @@ def iter_gather(client: Client, cities: list) -> list:
     :param cities: list of city names
     :return: returns 2D upper triangular matrix of distances
     """
+
+    print('Generating new distance dataset...')
+
     return [
         left_pad(
             gather(client, cities[i], cities[(i+1):]),
@@ -75,8 +78,15 @@ def run(cities: list) -> list:
                 pickle.dump(matrix, data_file)
                 return matrix
         else:
-            with open('distance_data', mode='rb') as data_file:
-                return pickle.load(data_file)
+            with open('distance_data', mode='r+b') as data_file:
+                matrix = pickle.load(data_file)
+                if len(matrix) != len(cities):
+                    matrix = iter_gather(client, cities)
+                    file_bytes = pickle.dumps(matrix)
+                    data_file.seek(0)
+                    data_file.write(file_bytes)
+                    data_file.truncate()
+                return matrix
     except FileNotFoundError:
         with open('distance_data', mode='ab') as data_file:
             matrix = iter_gather(client, cities)
