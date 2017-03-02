@@ -13,6 +13,8 @@ cities = [
     "New York, NY",
     "Los Angeles, CA",
     "San Francisco, CA",
+    "San Diego, CA",
+    "Reno, NV",
     "Houston, TX",
     "Phoenix, AZ",
     "Charlotte, NC",
@@ -21,7 +23,17 @@ cities = [
     "Memphis, TN",
     "Washington, DC",
     "Atlanta, GA",
-    "New Orleans, LA"
+    "New Orleans, LA",
+    "Nashville, TN",
+    "Denver, CO",
+    "Las Vegas, NV",
+    "Austin, TX",
+    "Philadelphia, PA",
+    "Pittsburgh, PA",
+    "Dallas, TX",
+    "Corpus Christi, TX",
+    "Portland, OR",
+    "Billings, MT"
 ]
 
 
@@ -82,8 +94,6 @@ def find_subtours(trip_list: list, visited=None, partial=[]) -> list:
                 visited.append(edge[0])
         return find_subtours(trip_list, visited, [subtour])
     else:
-        # not_visited = [i for i in range(n) if i not in visited]
-        # new_origin = not_visited[0]
         new_origin = trip_list[0][0]
         subtour = find_one_subtour(new_origin, trip_list, partial=set())
         for edge in subtour:
@@ -110,9 +120,24 @@ def pretty_solve(solver, iterations=1):
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
-        print('Travel from %i to %i' % t)
+        print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
 
     return tour
+
+
+def organize_tour(tour: set) -> list:
+    result = [tour.pop(0)]
+    while len(tour) > 0:
+        next = find_next_edge(result[-1][1], tour)
+        result.append(next)
+        tour.remove(next)
+    return result
+
+
+# def generate_map_link(tour: set) -> str:
+#     organized_tour = [tour[0]]
+#     while len(tour) > 0:
+#
 
 
 if __name__ == '__main__':
@@ -124,9 +149,11 @@ if __name__ == '__main__':
     solver = pywraplp.Solver('SolveIntegerProblem',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
+
     # reflect upper triangular matrix across diagonal
     def dist(i, j):
         return max(d[i][j], d[j][i])
+
 
     # instantiate x(i, j), binary decision variables
     # 0 indicates did not travel on edge x(i,j), 1 indicates did travel
@@ -167,4 +194,11 @@ if __name__ == '__main__':
         iteration += 1
         tour = pretty_solve(solver, iteration)
         tours = find_subtours(tour)
-    print('Optimal Solution Found!')
+
+    print('Feasible solution found for %i cities!' % n)
+    print('Number of subtour eliminations: %i' % (iteration - 1))
+    print('Number of variables: %i' % solver.NumVariables())
+    print('Number of constraints: %i' % solver.NumConstraints())
+
+    # print(organize_tour(tours[0]))
+
