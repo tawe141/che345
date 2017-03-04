@@ -1,6 +1,8 @@
 import data_gather
 from ortools.linear_solver import pywraplp
 
+cost = 1*10**6
+
 cities = [
     "Chicago, IL",
     "Milwaukee, WI",
@@ -10,30 +12,30 @@ cities = [
     "Cincinnati, OH",
     "Minneapolis, MN",
     "Detroit, MI",
-    "New York, NY",
-    "Los Angeles, CA",
-    "San Francisco, CA",
-    "San Diego, CA",
-    "Reno, NV",
-    "Houston, TX",
-    "Phoenix, AZ",
-    "Charlotte, NC",
-    "Seattle, WA",
-    "Boston, MA",
-    "Memphis, TN",
-    "Washington, DC",
-    "Atlanta, GA",
-    "New Orleans, LA",
-    "Nashville, TN",
-    "Denver, CO",
-    "Las Vegas, NV",
-    "Austin, TX",
-    "Philadelphia, PA",
-    "Pittsburgh, PA",
-    "Dallas, TX",
-    "Corpus Christi, TX",
-    "Portland, OR",
-    "Billings, MT"
+    # "New York, NY",
+    # "Los Angeles, CA",
+    # "San Francisco, CA",
+    # "San Diego, CA",
+    # "Reno, NV",
+    # "Houston, TX",
+    # "Phoenix, AZ",
+    # "Charlotte, NC",
+    # "Seattle, WA",
+    # "Boston, MA",
+    # "Memphis, TN",
+    # "Washington, DC",
+    # "Atlanta, GA",
+    # "New Orleans, LA",
+    # "Nashville, TN",
+    # "Denver, CO",
+    # "Las Vegas, NV",
+    # "Austin, TX",
+    # "Philadelphia, PA",
+    # "Pittsburgh, PA",
+    # "Dallas, TX",
+    # "Corpus Christi, TX",
+    # "Portland, OR",
+    # "Billings, MT"
 ]
 
 
@@ -120,8 +122,8 @@ def pretty_solve(solver, iterations=1):
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
-        print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
-
+        # print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
+        print('Travel from %i to %i' % t)
     return tour
 
 
@@ -162,16 +164,17 @@ if __name__ == '__main__':
         for j in range(n):
             x[i, j] = solver.BoolVar('x[%i,%i]' % (i, j))
 
-    # objective function: minimize total distance travelled
-    solver.Minimize(solver.Sum([dist(i, j) * x[i, j] for j in range(n) for i in range(n)]))
+    # objective function: maximize the number of cities visited
+    solver.Maximize(solver.Sum([x[i,j] for j in range(n) for i in range(n)]))
 
-    # all rows sum to 1
-    for i in range(n):
-        solver.Add(solver.Sum([x[i, j] for j in range(n)]) == 1)
+    solver.Add(solver.Sum([x[0, j] for j in range(1, n)]) == 1)
+    solver.Add(solver.Sum([x[i, 0] for i in range(1, n)]) == 1)
 
-    # all columns sum to 1
-    for j in range(n):
-        solver.Add(solver.Sum([x[i, j] for i in range(n)]) == 1)
+    for k in range(1,n):
+        solver.Add(solver.Sum([x[i, k] for i in range(n)]) == solver.Sum([x[k, j] for j in range(n)]))
+        solver.Add(solver.Sum([x[i, k] for i in range(n)]) <= 1)
+
+    solver.Add(solver.Sum([dist(i, j) * x[i, j] for j in range(n) for i in range(n)]) <= cost)
 
     # set diagonals x(i,i) for all i to 0
     solver.Add(solver.Sum([x[i, i] for i in range(n)]) == 0)
@@ -180,25 +183,25 @@ if __name__ == '__main__':
     tour = pretty_solve(solver)
     iteration = 1
 
-    # find all subtours in resulting trip
-    tours = find_subtours(tour)
+    # # find all subtours in resulting trip
+    # tours = find_subtours(tour)
+    #
+    # # while number of subtours is more than 1...
+    # while len(tours) > 1:
+    #     # find smallest subtour among all subtours
+    #     smallest_subtour = min(tours, key=len)
+    #
+    #     # add a new constraint. let {S} be all x(i,j) in subtour
+    #     # sum of all x(i,j) in {S} must be less than |S|-1
+    #     solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
+    #     iteration += 1
+    #     tour = pretty_solve(solver, iteration)
+    #     tours = find_subtours(tour)
 
-    # while number of subtours is more than 1...
-    while len(tours) > 1:
-        # find smallest subtour among all subtours
-        smallest_subtour = min(tours, key=len)
-
-        # add a new constraint. let {S} be all x(i,j) in subtour
-        # sum of all x(i,j) in {S} must be less than |S|-1
-        solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
-        iteration += 1
-        tour = pretty_solve(solver, iteration)
-        tours = find_subtours(tour)
-
-    print('Feasible solution found for %i cities!' % n)
-    print('Number of subtour eliminations: %i' % (iteration - 1))
-    print('Number of variables: %i' % solver.NumVariables())
-    print('Number of constraints: %i' % solver.NumConstraints())
+    # print('Feasible solution found for %i cities!' % n)
+    # print('Number of subtour eliminations: %i' % (iteration - 1))
+    # print('Number of variables: %i' % solver.NumVariables())
+    # print('Number of constraints: %i' % solver.NumConstraints())
 
     # print(organize_tour(tours[0]))
 
