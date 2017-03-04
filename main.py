@@ -9,31 +9,31 @@ cities = [
     "St. Louis, MO",
     "Cincinnati, OH",
     "Minneapolis, MN",
-    "Detroit, MI",
-    "New York, NY",
-    "Los Angeles, CA",
-    "San Francisco, CA",
-    "San Diego, CA",
-    "Reno, NV",
-    "Houston, TX",
-    "Phoenix, AZ",
-    "Charlotte, NC",
-    "Seattle, WA",
-    "Boston, MA",
-    "Memphis, TN",
-    "Washington, DC",
-    "Atlanta, GA",
-    "New Orleans, LA",
-    "Nashville, TN",
-    "Denver, CO",
-    "Las Vegas, NV",
-    "Austin, TX",
-    "Philadelphia, PA",
-    "Pittsburgh, PA",
-    "Dallas, TX",
-    "Corpus Christi, TX",
-    "Portland, OR",
-    "Billings, MT"
+    # "Detroit, MI",
+    # "New York, NY",
+    # "Los Angeles, CA",
+    # "San Francisco, CA",
+    # "San Diego, CA",
+    # "Reno, NV",
+    # "Houston, TX",
+    # "Phoenix, AZ",
+    # "Charlotte, NC",
+    # "Seattle, WA",
+    # "Boston, MA",
+    # "Memphis, TN",
+    # "Washington, DC",
+    # "Atlanta, GA",
+    # "New Orleans, LA",
+    # "Nashville, TN",
+    # "Denver, CO",
+    # "Las Vegas, NV",
+    # "Austin, TX",
+    # "Philadelphia, PA",
+    # "Pittsburgh, PA",
+    # "Dallas, TX",
+    # "Corpus Christi, TX",
+    # "Portland, OR",
+    # "Billings, MT"
 ]
 
 
@@ -120,18 +120,18 @@ def pretty_solve(solver, iterations=1):
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
-        print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
-
+        # print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
+        print('Travel from %i to %i' % t)
     return tour
 
 
-def organize_tour(tour: set) -> list:
-    result = [tour.pop(0)]
-    while len(tour) > 0:
-        next = find_next_edge(result[-1][1], tour)
-        result.append(next)
-        tour.remove(next)
-    return result
+# def organize_tour(tour: set) -> list:
+#     result = [tour.pop(0)]
+#     while len(tour) > 0:
+#         next = find_next_edge(result[-1][1], tour)
+#         result.append(next)
+#         tour.remove(next)
+#     return result
 
 
 # def generate_map_link(tour: set) -> str:
