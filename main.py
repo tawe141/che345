@@ -123,11 +123,23 @@ def find_subtours(trip_list: list, visited=None, partial=[]) -> list:
 
 
 def total_distance(x: dict, distances: list) -> float:
+    """
+    Finds total distance travelled given list of BoolVars and distance matrix
+    :param x: dict of BoolVars
+    :param distances: list; distance matrix
+    :return: float: total distance in meters
+    """
     tour = [key for key in x if x[key].solution_value() > 0]
     return sum([distances[t[0]][t[1]] for t in tour])
 
 
 def total_cost(x: dict, prices: dict) -> float:
+    """
+    Finds total cost of route given list of BoolVars and price data
+    :param x: list of BoolVars
+    :param prices: price data for gas and hotel at each city
+    :return: float: total cost in $
+    """
     tour = [key for key in x if x[key].solution_value() > 0]
     # add gas prices
     cost = sum([dist(t[0], t[1]) / 1000 / kmpg * prices[t[1]][0] + prices[t[1]][1] + personal_spending_lim for t in tour])
@@ -150,10 +162,9 @@ def pretty_solve(solver, iterations=1):
         print('Iteration %i: Subtour elimination %i' % (iterations, iterations - 1))
     solver.Solve()
 
-    print('Cities visited: ', solver.Objective().Value())
-    print('Total distance: %d' % total_distance(x, d))
+    # print('Cities visited: ', solver.Objective().Value())
+    # print('Total distance: %d' % total_distance(x, d))
     # print('Total cost: %d' % solver.LookupConstraint('total_cost').dual_value())
-
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
