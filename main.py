@@ -1,7 +1,7 @@
 import data_gather
 from ortools.linear_solver import pywraplp
 
-cost = 1*10**6
+cost = 1 * 10 ** 6
 
 cities = [
     "Chicago, IL",
@@ -141,6 +141,16 @@ def organize_tour(tour: set) -> list:
 #     while len(tour) > 0:
 #
 
+def visited(tour: set) -> list:
+    v = []
+    for t in tour:
+        if t[0] not in v:
+            v.append(t[0])
+        if t[1] not in v:
+            v.append(t[1])
+
+    return v
+
 
 if __name__ == '__main__':
     # gather distance data
@@ -165,12 +175,14 @@ if __name__ == '__main__':
             x[i, j] = solver.BoolVar('x[%i,%i]' % (i, j))
 
     # objective function: maximize the number of cities visited
-    solver.Maximize(solver.Sum([x[i,j] for j in range(n) for i in range(n)]))
+    # caution: formulation actually assumes directed graph
+    # undirected case as described by Laporte 1987 is far more efficient
+    solver.Maximize(solver.Sum([x[i, j] for j in range(n) for i in range(n)]))
 
     solver.Add(solver.Sum([x[0, j] for j in range(1, n)]) == 1)
     solver.Add(solver.Sum([x[i, 0] for i in range(1, n)]) == 1)
 
-    for k in range(1,n):
+    for k in range(1, n):
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) == solver.Sum([x[k, j] for j in range(n)]))
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) <= 1)
 
@@ -183,25 +195,45 @@ if __name__ == '__main__':
     tour = pretty_solve(solver)
     iteration = 1
 
-    # # find all subtours in resulting trip
-    # tours = find_subtours(tour)
-    #
-    # # while number of subtours is more than 1...
-    # while len(tours) > 1:
-    #     # find smallest subtour among all subtours
-    #     smallest_subtour = min(tours, key=len)
-    #
-    #     # add a new constraint. let {S} be all x(i,j) in subtour
-    #     # sum of all x(i,j) in {S} must be less than |S|-1
-    #     solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
-    #     iteration += 1
-    #     tour = pretty_solve(solver, iteration)
-    #     tours = find_subtours(tour)
+    # find all subtours in resulting trip
+    tours = find_subtours(tour)
 
-    # print('Feasible solution found for %i cities!' % n)
-    # print('Number of subtour eliminations: %i' % (iteration - 1))
-    # print('Number of variables: %i' % solver.NumVariables())
-    # print('Number of constraints: %i' % solver.NumConstraints())
+    # while number of subtours is more than 1...
+    while len(tours) > 1:
+        # find smallest subtour among all subtours
+        smallest_subtour = min(tours, key=len)
+        v = visited(smallest_subtour)
 
-    # print(organize_tour(tours[0]))
+        # # add a new constraint. let {S} be all x(i,j) in subtour
+        # # sum of all x(i,j) in {S} must be less than |S|-1
+        # solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
 
+        # add a new constraint.
+        solver.Add(
+            solver.Sum(
+                [
+                    solver.Sum(
+                        [x[i, k] for i in range(n)]
+                    ) +
+                    solver.Sum(
+                        [x[k, j] for j in range(n)]
+                    )
+                    for k in v
+                    ]
+            ) <= len(smallest_subtour) * (
+                solver.Sum([x[i, j] for j in range(n) if j not in v for i in range(n) if i in v])
+                +
+                solver.Sum([x[i, j] for j in range(n) if j in v for i in range(n) if i not in v])
+            )
+        )
+
+        iteration += 1
+        tour = pretty_solve(solver, iteration)
+        tours = find_subtours(tour)
+
+        print('Feasible solution found for %i cities!' % n)
+        print('Number of subtour eliminations: %i' % (iteration - 1))
+        print('Number of variables: %i' % solver.NumVariables())
+        print('Number of constraints: %i' % solver.NumConstraints())
+
+        # print(organize_tour(tours[0]))
