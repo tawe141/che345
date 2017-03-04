@@ -1,7 +1,7 @@
 import data_gather
 from ortools.linear_solver import pywraplp
 
-cost_lim = 5 * 10 ** 6
+cost_lim = 7 * 10 ** 6
 
 cities = [
     "Chicago, IL",
@@ -10,6 +10,7 @@ cities = [
     "Kansas City, MO",
     "St. Louis, MO",
     "Cincinnati, OH",
+    "Columbus, OH",
     "Minneapolis, MN",
     "Detroit, MI",
     "New York, NY",
@@ -35,7 +36,16 @@ cities = [
     "Dallas, TX",
     "Corpus Christi, TX",
     "Portland, OR",
-    "Billings, MT"
+    "Billings, MT",
+    "Miami, FL",
+    "Orlando, FL",
+    "Tampa, FL",
+    "Little Rock, AR",
+    "Providence, RI",
+    "Salt Lake City, UT",
+    "Tucson, AZ",
+    "Albuquerque, NM",
+    "Oklahoma City, OK"
 ]
 
 
@@ -118,7 +128,7 @@ def pretty_solve(solver, iterations=1):
     else:
         print('Iteration %i: Subtour elimination %i' % (iterations, iterations - 1))
     solver.Solve()
-    print('Total Distance: ', solver.Objective().Value())
+    print('Cities visited: ', solver.Objective().Value())
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
