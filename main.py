@@ -1,7 +1,7 @@
 import data_gather
 from ortools.linear_solver import pywraplp
 
-cost = 1 * 10 ** 6
+cost_lim = 5 * 10 ** 6
 
 cities = [
     "Chicago, IL",
@@ -12,30 +12,30 @@ cities = [
     "Cincinnati, OH",
     "Minneapolis, MN",
     "Detroit, MI",
-    # "New York, NY",
-    # "Los Angeles, CA",
-    # "San Francisco, CA",
-    # "San Diego, CA",
-    # "Reno, NV",
-    # "Houston, TX",
-    # "Phoenix, AZ",
-    # "Charlotte, NC",
-    # "Seattle, WA",
-    # "Boston, MA",
-    # "Memphis, TN",
-    # "Washington, DC",
-    # "Atlanta, GA",
-    # "New Orleans, LA",
-    # "Nashville, TN",
-    # "Denver, CO",
-    # "Las Vegas, NV",
-    # "Austin, TX",
-    # "Philadelphia, PA",
-    # "Pittsburgh, PA",
-    # "Dallas, TX",
-    # "Corpus Christi, TX",
-    # "Portland, OR",
-    # "Billings, MT"
+    "New York, NY",
+    "Los Angeles, CA",
+    "San Francisco, CA",
+    "San Diego, CA",
+    "Reno, NV",
+    "Houston, TX",
+    "Phoenix, AZ",
+    "Charlotte, NC",
+    "Seattle, WA",
+    "Boston, MA",
+    "Memphis, TN",
+    "Washington, DC",
+    "Atlanta, GA",
+    "New Orleans, LA",
+    "Nashville, TN",
+    "Denver, CO",
+    "Las Vegas, NV",
+    "Austin, TX",
+    "Philadelphia, PA",
+    "Pittsburgh, PA",
+    "Dallas, TX",
+    "Corpus Christi, TX",
+    "Portland, OR",
+    "Billings, MT"
 ]
 
 
@@ -186,7 +186,7 @@ if __name__ == '__main__':
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) == solver.Sum([x[k, j] for j in range(n)]))
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) <= 1)
 
-    solver.Add(solver.Sum([dist(i, j) * x[i, j] for j in range(n) for i in range(n)]) <= cost)
+    solver.Add(solver.Sum([dist(i, j) * x[i, j] for j in range(n) for i in range(n)]) <= cost_lim)
 
     # set diagonals x(i,i) for all i to 0
     solver.Add(solver.Sum([x[i, i] for i in range(n)]) == 0)
@@ -231,9 +231,10 @@ if __name__ == '__main__':
         tour = pretty_solve(solver, iteration)
         tours = find_subtours(tour)
 
-        print('Feasible solution found for %i cities!' % n)
-        print('Number of subtour eliminations: %i' % (iteration - 1))
-        print('Number of variables: %i' % solver.NumVariables())
-        print('Number of constraints: %i' % solver.NumConstraints())
+    print('Feasible solution found for %i cities!' % n)
+    print('Number of cities visited: %i' % int(solver.Objective().Value()))
+    print('Number of subtour eliminations: %i' % (iteration - 1))
+    print('Number of variables: %i' % solver.NumVariables())
+    print('Number of constraints: %i' % solver.NumConstraints())
 
-        # print(organize_tour(tours[0]))
+    # print(organize_tour(tours[0]))
