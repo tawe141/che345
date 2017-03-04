@@ -1,7 +1,15 @@
-import data_gather
+import distance_gather
+import price_gather
 from ortools.linear_solver import pywraplp
 
-cost_lim = 7 * 10 ** 6
+dist_lim = 7 * 10 ** 6
+
+cost_lim = 700
+
+# assume Honda Civic KmPG is 53km/gal
+kmpg = 53
+
+personal_spending_lim = 80
 
 cities = [
     "Chicago, IL",
@@ -128,7 +136,9 @@ def pretty_solve(solver, iterations=1):
     else:
         print('Iteration %i: Subtour elimination %i' % (iterations, iterations - 1))
     solver.Solve()
+
     print('Cities visited: ', solver.Objective().Value())
+    print('Cost: ')
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
@@ -164,8 +174,12 @@ def visited(tour: set) -> list:
 
 if __name__ == '__main__':
     # gather distance data
-    d = data_gather.run(cities)
-    n = len(d)
+    d = distance_gather.run(cities)
+
+    # gather gas and hotel cost data
+    prices = price_gather.run(cities)
+
+    n = len(cities)
 
     # instantiate MILP solver. uses CBC algorithm
     solver = pywraplp.Solver('SolveIntegerProblem',
@@ -196,7 +210,9 @@ if __name__ == '__main__':
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) == solver.Sum([x[k, j] for j in range(n)]))
         solver.Add(solver.Sum([x[i, k] for i in range(n)]) <= 1)
 
-    solver.Add(solver.Sum([dist(i, j) * x[i, j] for j in range(n) for i in range(n)]) <= cost_lim)
+    solver.Add(solver.Sum([(dist(i, j) / 1000 / kmpg * prices[j][0]
+                            + prices[j][1] + personal_spending_lim)
+                           * x[i, j] for j in range(n) for i in range(n)]) <= cost_lim)
 
     # set diagonals x(i,i) for all i to 0
     solver.Add(solver.Sum([x[i, i] for i in range(n)]) == 0)
@@ -213,10 +229,6 @@ if __name__ == '__main__':
         # find smallest subtour among all subtours
         smallest_subtour = min(tours, key=len)
         v = visited(smallest_subtour)
-
-        # # add a new constraint. let {S} be all x(i,j) in subtour
-        # # sum of all x(i,j) in {S} must be less than |S|-1
-        # solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
 
         # add a new constraint.
         solver.Add(
