@@ -4,7 +4,7 @@ from ortools.linear_solver import pywraplp
 
 dist_lim = 7 * 10 ** 6
 
-cost_lim = 700
+cost_lim = 1000
 
 # assume Honda Civic KmPG is 53km/gal
 kmpg = 53
@@ -122,6 +122,19 @@ def find_subtours(trip_list: list, visited=None, partial=[]) -> list:
         return find_subtours(trip_list, visited, partial + [subtour])
 
 
+def total_distance(x: dict, distances: list) -> float:
+    tour = [key for key in x if x[key].solution_value() > 0]
+    return sum([distances[t[0]][t[1]] for t in tour])
+
+
+def total_cost(x: dict, prices: dict) -> float:
+    tour = [key for key in x if x[key].solution_value() > 0]
+    # add gas prices
+    cost = sum([dist(t[0], t[1]) / 1000 / kmpg * prices[t[1]][0] + prices[t[1]][1] + personal_spending_lim for t in tour])
+
+    return cost
+
+
 def pretty_solve(solver, iterations=1):
     """
     Solves and prints result of iteration
@@ -138,7 +151,9 @@ def pretty_solve(solver, iterations=1):
     solver.Solve()
 
     print('Cities visited: ', solver.Objective().Value())
-    print('Cost: ')
+    print('Total distance: %d' % total_distance(x, d))
+    # print('Total cost: %d' % solver.LookupConstraint('total_cost').dual_value())
+
 
     tour = [key for key in x if x[key].solution_value() > 0]
     for t in tour:
@@ -147,13 +162,13 @@ def pretty_solve(solver, iterations=1):
     return tour
 
 
-def organize_tour(tour: set) -> list:
-    result = [tour.pop(0)]
-    while len(tour) > 0:
-        next = find_next_edge(result[-1][1], tour)
-        result.append(next)
-        tour.remove(next)
-    return result
+# def organize_tour(tour: set) -> list:
+#     result = [tour.pop(0)]
+#     while len(tour) > 0:
+#         next = find_next_edge(result[-1][1], tour)
+#         result.append(next)
+#         tour.remove(next)
+#     return result
 
 
 # def generate_map_link(tour: set) -> str:
@@ -212,7 +227,7 @@ if __name__ == '__main__':
 
     solver.Add(solver.Sum([(dist(i, j) / 1000 / kmpg * prices[j][0]
                             + prices[j][1] + personal_spending_lim)
-                           * x[i, j] for j in range(n) for i in range(n)]) <= cost_lim)
+                           * x[i, j] for j in range(n) for i in range(n)]) <= cost_lim, name='total_cost')
 
     # set diagonals x(i,i) for all i to 0
     solver.Add(solver.Sum([x[i, i] for i in range(n)]) == 0)
@@ -255,8 +270,8 @@ if __name__ == '__main__':
 
     print('Feasible solution found for %i cities!' % n)
     print('Number of cities visited: %i' % int(solver.Objective().Value()))
+    print('Total cost: %d' % total_cost(x, prices))
+    print('Total distance: %d km' % (total_distance(x, d)/1000))
     print('Number of subtour eliminations: %i' % (iteration - 1))
     print('Number of variables: %i' % solver.NumVariables())
     print('Number of constraints: %i' % solver.NumConstraints())
-
-    # print(organize_tour(tours[0]))
