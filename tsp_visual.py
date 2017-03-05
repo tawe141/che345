@@ -14,7 +14,7 @@ class TSPVisual:
         self.edges = edges
         self.coords = geocode_gather.run(cities)
         self.labels = {i: cities[i] for i in range(len(cities))}
-        nx.draw_networkx(self.G, self.coords, labels=self.labels)
+        nx.draw_networkx(self.G, self.coords, labels=self.labels, edgelist=self.edges)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
         plt.title('Iteration 1')
