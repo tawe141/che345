@@ -12,13 +12,13 @@ cities = [
     "Minneapolis, MN",
     "Detroit, MI",
     "New York, NY",
-    # "Los Angeles, CA",
-    # "San Francisco, CA",
-    # "San Diego, CA",
-    # "Reno, NV",
-    # "Houston, TX",
-    # "Phoenix, AZ",
-    # "Charlotte, NC",
+    "Los Angeles, CA",
+    "San Francisco, CA",
+    "San Diego, CA",
+    "Reno, NV",
+    "Houston, TX",
+    "Phoenix, AZ",
+    "Charlotte, NC",
     # "Seattle, WA",
     # "Boston, MA",
     # "Memphis, TN",
@@ -37,6 +37,7 @@ cities = [
     # "Billings, MT"
 ]
 
+visual = TSPVisual(cities)
 
 
 def find_next_edge(origin: int, trip_list: list) -> bool or tuple:
@@ -125,7 +126,7 @@ def pretty_solve(solver, iterations=1):
         # print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
         print('Travel from %i to %i' % t)
 
-    # visual.update_edges(tour)
+    visual.update_edges(tour, iterations)
 
     return tour
 
@@ -211,8 +212,8 @@ if __name__ == '__main__':
     print('Number of variables: %i' % solver.NumVariables())
     print('Number of constraints: %i' % solver.NumConstraints())
 
-    # tsp_visual.run(cities, [key for key in x if x[key].solution_value() > 0])
-    visual = TSPVisual(cities, [key for key in x if x[key].solution_value() > 0])
+    # visual = TSPVisual(cities, [key for key in x if x[key].solution_value() > 0])
+    visual.hold()
 
     # print(organize_tour(tours[0]))
 
