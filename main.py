@@ -1,4 +1,5 @@
 import data_gather
+import tsp_visual
 from ortools.linear_solver import pywraplp
 
 cities = [
@@ -9,8 +10,8 @@ cities = [
     "St. Louis, MO",
     "Cincinnati, OH",
     "Minneapolis, MN",
-    # "Detroit, MI",
-    # "New York, NY",
+    "Detroit, MI",
+    "New York, NY",
     # "Los Angeles, CA",
     # "San Francisco, CA",
     # "San Diego, CA",
@@ -185,12 +186,18 @@ if __name__ == '__main__':
 
     # while number of subtours is more than 1...
     while len(tours) > 1:
-        # find smallest subtour among all subtours
-        smallest_subtour = min(tours, key=len)
+        # # find smallest subtour among all subtours
+        # smallest_subtour = min(tours, key=len)
 
-        # add a new constraint. let {S} be all x(i,j) in subtour
-        # sum of all x(i,j) in {S} must be less than |S|-1
-        solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
+        # # add a new constraint. let {S} be all x(i,j) in subtour
+        # # sum of all x(i,j) in {S} must be less than |S|-1
+        # solver.Add(solver.Sum([x[i] for i in smallest_subtour]) <= len(smallest_subtour) - 1)
+
+        # for each subtour found, add constraint such that subtour is eliminated
+
+        for t in tours:
+            solver.Add(solver.Sum([x[i] for i in t]) <= len(t) - 1)
+
         iteration += 1
         tour = pretty_solve(solver, iteration)
         tours = find_subtours(tour)
@@ -199,6 +206,8 @@ if __name__ == '__main__':
     print('Number of subtour eliminations: %i' % (iteration - 1))
     print('Number of variables: %i' % solver.NumVariables())
     print('Number of constraints: %i' % solver.NumConstraints())
+
+    tsp_visual.run(cities, [key for key in x if x[key].solution_value() > 0])
 
     # print(organize_tour(tours[0]))
 
