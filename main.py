@@ -1,6 +1,7 @@
 import distance_gather
 import price_gather
 from ortools.linear_solver import pywraplp
+from tsp_visual import TSPVisual
 
 dist_lim = 7 * 10 ** 6
 
@@ -286,3 +287,5 @@ if __name__ == '__main__':
     print('Number of subtour eliminations: %i' % (iteration - 1))
     print('Number of variables: %i' % solver.NumVariables())
     print('Number of constraints: %i' % solver.NumConstraints())
+
+    visual = TSPVisual(cities, [key for key in x if x[key].solution_value() > 0])
