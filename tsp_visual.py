@@ -32,23 +32,10 @@ class TSPVisual:
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
         plt.title('Iteration %i' % iterations)
-        plt.show()
+        # plt.show()
 
 
     def hold(self):
         plt.ioff()
         plt.show()
 
-
-# def run(cities, tour):
-#     coords = geocode_gather.run(cities)
-#     G = nx.Graph()
-#     G.add_nodes_from(range(len(cities)))
-#     G.add_edges_from(tour)
-#     nx.draw_networkx(G, coords)
-#     plt.show()
-
-
-# def init(cities):
-#     coords = geocode_gather.run(cities)
-#     G =
