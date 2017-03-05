@@ -9,7 +9,7 @@ dotenv.load()
 
 def get_geocode(client, city: str) -> tuple:
     data = geocoding.geocode(client, city)
-    return data[0]['geometry']['location']['lat'], data[0]['geometry']['location']['lng']
+    return data[0]['geometry']['location']['lng'], data[0]['geometry']['location']['lat']
 
 
 def run(cities):

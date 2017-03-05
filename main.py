@@ -1,5 +1,5 @@
 import data_gather
-import tsp_visual
+from tsp_visual import TSPVisual
 from ortools.linear_solver import pywraplp
 
 cities = [
@@ -36,6 +36,7 @@ cities = [
     # "Portland, OR",
     # "Billings, MT"
 ]
+
 
 
 def find_next_edge(origin: int, trip_list: list) -> bool or tuple:
@@ -123,6 +124,9 @@ def pretty_solve(solver, iterations=1):
     for t in tour:
         # print('Travel from %s to %s' % (cities[t[0]], cities[t[1]]))
         print('Travel from %i to %i' % t)
+
+    # visual.update_edges(tour)
+
     return tour
 
 
@@ -207,7 +211,8 @@ if __name__ == '__main__':
     print('Number of variables: %i' % solver.NumVariables())
     print('Number of constraints: %i' % solver.NumConstraints())
 
-    tsp_visual.run(cities, [key for key in x if x[key].solution_value() > 0])
+    # tsp_visual.run(cities, [key for key in x if x[key].solution_value() > 0])
+    visual = TSPVisual(cities, [key for key in x if x[key].solution_value() > 0])
 
     # print(organize_tour(tours[0]))
 
