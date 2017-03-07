@@ -6,7 +6,7 @@ import geocode_gather
 class TSPVisual:
     # plt.draw()
     def __init__(self, cities: list, edges=[]):
-        plt.ion()
+        # plt.ion()
         self.G = nx.Graph()
         self.G.add_nodes_from(range(len(cities)))
         self.G.add_edges_from(edges)
