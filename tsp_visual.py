@@ -6,7 +6,6 @@ import geocode_gather
 class TSPVisual:
     # plt.draw()
     def __init__(self, cities: list, edges=[]):
-        plt.ion()
         self.G = nx.Graph()
         self.G.add_nodes_from(range(len(cities)))
         self.G.add_edges_from(edges)
@@ -14,11 +13,10 @@ class TSPVisual:
         self.edges = edges
         self.coords = geocode_gather.run(cities)
         self.labels = {i: cities[i] for i in range(len(cities))}
-        nx.draw_networkx(self.G, self.coords, labels=self.labels)
+        nx.draw_networkx(self.G, self.coords, labels=self.labels, node_size=50, font_size=8)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
-        plt.title('Iteration 1')
-        # plt.show()
+        plt.show()
 
     def update_edges(self, new_edges: list, iterations: int):
         plt.clf()
@@ -31,7 +29,6 @@ class TSPVisual:
         nx.draw_networkx(self.G, self.coords, edgelist=self.edges, labels=self.labels)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
-        plt.title('Iteration %i' % iterations)
         # plt.show()
 
 

@@ -5,7 +5,7 @@ from tsp_visual import TSPVisual
 
 dist_lim = 7 * 10 ** 6
 
-cost_lim = 1000
+cost_lim = 4000
 
 # assume Honda Civic KmPG is 53km/gal
 kmpg = 53
